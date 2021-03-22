@@ -29,6 +29,12 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define __END_DECLS /* empty */
 #endif
 
+#ifdef _MSC_VER
+#define thread_local __declspec(thread)
+#else
+#define thread_local __thread
+#endif
+
 /* Generic helper definitions for shared library support. */
 #if defined _WIN32 || defined __CYGWIN__
   #define DETEX_HELPER_SHARED_IMPORT __declspec(dllimport)
@@ -778,9 +784,7 @@ DETEX_API bool detexDecompressTextureLinear(const detexTexture *texture, uint8_t
  * be allocated with sufficient size to the hold the result. Returns true if
  * succesful.
  */
-DETEX_API bool detexConvertPixels(uint8_t *source_pixel_buffer, uint32_t nu_pixels,
-	uint32_t source_pixel_format, uint8_t *target_pixel_buffer,
-	uint32_t target_pixel_format);
+DETEX_API bool detexConvertPixels(uint8_t *source_pixel_buffer, uint32_t nu_pixels,	uint32_t source_pixel_format, uint8_t *target_pixel_buffer,	uint32_t target_pixel_format);
 
 /* Convert in-place, modifying the source pixel buffer only. If any conversion step changes the */
 /* pixel size, the function will not be succesful and return false. */

@@ -126,7 +126,7 @@ static double CalculateZoomFactor() {
 static void DrawTexture(detexTexture *texture, uint8_t *pixel_buffer) {
 	cairo_t *cr = cairo_create(area_surface);
 	cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-	cairo_set_source_rgba(cr, 0.0d, 0.0d, 0.0d, 1.0d);
+	cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0);
 	cairo_paint(cr);
 	if (texture == NULL) {
 		cairo_destroy(cr);
@@ -138,11 +138,11 @@ static void DrawTexture(detexTexture *texture, uint8_t *pixel_buffer) {
 	double zoom_factor = CalculateZoomFactor();
 	cairo_rectangle(cr, 0, 0, zoom_factor * texture->width, zoom_factor * texture->height);
 	if (detexFormatHasAlpha(texture->format)) {
-		cairo_set_source_rgba(cr, 0.0d, 0.0d, 0.5d, 1.0d);
+		cairo_set_source_rgba(cr, 0.0, 0.0, 0.5, 1.0);
 		cairo_fill(cr);
 	}
         cairo_scale(cr, zoom_factor, zoom_factor);
-	cairo_set_source_surface(cr, image_surface, 0.0d, 0.0d);
+	cairo_set_source_surface(cr, image_surface, 0.0, 0.0);
         cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_NEAREST);
 	cairo_mask(cr, cairo_get_source(cr));
 	cairo_destroy(cr);
@@ -167,23 +167,18 @@ int main(int argc, char **argv) {
 	}
 	CreateWindowLayout();
 	char *label_text;
-	asprintf(&label_text, "File: %s  Size: %dx%d  Format: %s",
-		filename, texture->width, texture->height,
-		detexGetTextureFormatText(texture->format));
-	gtk_label_set_text(GTK_LABEL(texture_label), label_text);
+	//sprintf(&label_text, "File: %s  Size: %dx%d  Format: %s", filename, texture->width, texture->height, detexGetTextureFormatText(texture->format));
+	//gtk_label_set_text(GTK_LABEL(texture_label), label_text);
 	uint32_t pixel_format;
 	// Convert to a format suitable for Cairo.
 	if (detexFormatHasAlpha(texture->format))
 		pixel_format = DETEX_PIXEL_FORMAT_BGRA8;
 	else
 		pixel_format = DETEX_PIXEL_FORMAT_BGRX8;
-	pixel_buffer = (uint8_t *)malloc(texture->width * texture->height *
-		detexGetPixelSize(pixel_format));
-	r = detexDecompressTextureLinear(texture, pixel_buffer,
-		pixel_format);
+	pixel_buffer = (uint8_t *)malloc(texture->width * texture->height * 	detexGetPixelSize(pixel_format));
+	r = detexDecompressTextureLinear(texture, pixel_buffer,	pixel_format);
 	if (!r) {
-		printf("Decompression of %s returned error:\n%s\n",
-			filename, detexGetErrorMessage());
+		printf("Decompression of %s returned error:\n%s\n", filename, detexGetErrorMessage());
 		exit(1);
 	}
 	DrawTexture(texture, pixel_buffer);

@@ -94,7 +94,7 @@ end:
 
 // Error handling.
 
-static __thread char *detex_error_message = NULL;
+static thread_local char *detex_error_message = NULL;
 
 void detexSetErrorMessage(const char *format, ...) {
 	if (detex_error_message != NULL)

@@ -106,8 +106,7 @@ bool detexDecompressTextureLinear(const detexTexture *texture,
 uint8_t * DETEX_RESTRICT pixel_buffer, uint32_t pixel_format) {
 	uint8_t block_buffer[DETEX_MAX_BLOCK_SIZE];
 	if (!detexFormatIsCompressed(texture->format)) {
-		return detexConvertPixels(texture->data, texture->width * texture->height,
-			detexGetPixelFormat(texture->format), pixel_buffer, pixel_format);
+		return detexConvertPixels(texture->data, texture->width * texture->height, detexGetPixelFormat(texture->format), pixel_buffer, pixel_format);
 	}
 	const uint8_t *data = texture->data;
 	int pixel_size = detexGetPixelSize(pixel_format);
